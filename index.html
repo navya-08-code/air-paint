@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Virtual Air Painter</title>
+    <!-- MediaPipe Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Effect -->
+    <div class="cyber-grid"></div>
+
+    <!-- Main Content Container -->
+    <div class="app-container">
+        <!-- Hidden video element for webcam feed -->
+        <video class="input_video" autoplay playsinline></video>
+        
+        <!-- Output canvas for drawing and UI overlay -->
+        <canvas class="output_canvas" id="canvas"></canvas>
+
+        <!-- Onboarding Modal -->
+        <div class="overlay" id="onboarding">
+            <div class="modal glass-panel">
+                <h1 class="neon-text">Virtual Air Painter</h1>
+                <p>Allow camera access to begin.</p>
+                <div class="gesture-instructions">
+                    <div class="gesture-item">
+                        <span class="gesture-icon">🤌</span>
+                        <span><strong>Pinch</strong> to Draw</span>
+                    </div>
+                    <div class="gesture-item">
+                        <span class="gesture-icon">✌️</span>
+                        <span><strong>Peace Sign</strong> to Erase</span>
+                    </div>
+                    <div class="gesture-item">
+                        <span class="gesture-icon">🖐️</span>
+                        <span><strong>Open Hand</strong> to Stop/Move</span>
+                    </div>
+                </div>
+                <div class="loading-spinner" id="loading-spinner">Initializing AI Model...</div>
+                <button id="start-btn" class="neon-btn" style="display: none;">Start Drawing</button>
+            </div>
+        </div>
+
+        <!-- HUD (Heads Up Display) -->
+        <div class="hud glass-panel">
+            <div class="hud-item">
+                <span class="hud-label">FPS</span>
+                <span id="fps-counter" class="hud-value neon-cyan">0</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Status</span>
+                <span id="hand-status" class="hud-value neon-pink">No Hand</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Gesture</span>
+                <span id="current-gesture" class="hud-value">Idle</span>
+            </div>
+        </div>
+
+        <!-- Floating Toolbar -->
+        <div class="toolbar glass-panel">
+            <div class="tool-group">
+                <label>Color</label>
+                <div class="color-picker">
+                    <button class="color-btn active" data-color="#ff00ff" style="background: #ff00ff; box-shadow: 0 0 10px #ff00ff;"></button>
+                    <button class="color-btn" data-color="#00ffff" style="background: #00ffff; box-shadow: 0 0 10px #00ffff;"></button>
+                    <button class="color-btn" data-color="#00ff00" style="background: #00ff00; box-shadow: 0 0 10px #00ff00;"></button>
+                    <button class="color-btn" data-color="#ffaa00" style="background: #ffaa00; box-shadow: 0 0 10px #ffaa00;"></button>
+                    <button class="color-btn" data-color="#ffffff" style="background: #ffffff; box-shadow: 0 0 10px #ffffff;"></button>
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <label>Brush Type</label>
+                <div class="brush-picker">
+                    <button class="brush-btn active" data-brush="neon">Neon</button>
+                    <button class="brush-btn" data-brush="soft">Soft</button>
+                    <button class="brush-btn" data-brush="particle">Particle</button>
+                    <button class="brush-btn" data-brush="eraser">Eraser</button>
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <label>Size: <span id="size-val">10</span></label>
+                <input type="range" id="brush-size" min="2" max="50" value="10" class="neon-slider">
+            </div>
+
+            <div class="tool-group actions">
+                <button id="btn-undo" class="action-btn" title="Undo">↩️</button>
+                <button id="btn-clear" class="action-btn" title="Clear Canvas">🗑️</button>
+                <button id="btn-save" class="action-btn" title="Save Image">💾</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local Script -->
+    <script src="script.js"></script>
+</body>
+</html>
